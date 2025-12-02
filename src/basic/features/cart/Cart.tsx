@@ -1,22 +1,21 @@
 import { CartItem, Coupon } from '../../../types';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
+import { ProductWithUI } from '../../App';
 
 export const Cart = ({
   cart,
   setCart,
-  removeFromCart,
-  updateQuantity,
   calculateItemTotal,
   calculateCartTotal,
   selectedCoupon,
   setSelectedCoupon,
   coupons,
   addNotification,
+  products,
 }: {
+  products: ProductWithUI[];
   cart: CartItem[];
   setCart: Dispatch<SetStateAction<CartItem[]>>;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
   calculateItemTotal: (item: CartItem) => number;
   calculateCartTotal: () => {
     totalBeforeDiscount: number;
@@ -64,6 +63,39 @@ export const Cart = ({
   }, [addNotification]);
 
   const totals = calculateCartTotal();
+
+  const updateQuantity = useCallback(
+    (productId: string, newQuantity: number) => {
+      if (newQuantity <= 0) {
+        removeFromCart(productId);
+        return;
+      }
+
+      const product = products.find((p) => p.id === productId);
+      if (!product) return;
+
+      const maxStock = product.stock;
+      if (newQuantity > maxStock) {
+        addNotification(`재고는 ${maxStock}개까지만 있습니다.`, 'error');
+        return;
+      }
+
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.product.id === productId
+            ? { ...item, quantity: newQuantity }
+            : item,
+        ),
+      );
+    },
+    [cart, setCart, addNotification],
+  );
+
+  const removeFromCart = useCallback((productId: string) => {
+    setCart((prevCart) =>
+      prevCart.filter((item) => item.product.id !== productId),
+    );
+  }, []);
 
   return (
     <div className="lg:col-span-1">

@@ -58,6 +58,8 @@ export const getRemainingStock = (
 };
 
 const App = () => {
+  // 전체 페이지 단위에서 관리가 필요한 것과, 각 컴포넌트 내부에서 로직 처리가 필요한 내용을 나눠보자!
+
   const [products, setProducts] = useState<ProductWithUI[]>(() => {
     const saved = localStorage.getItem('products');
     if (saved) {
@@ -82,19 +84,30 @@ const App = () => {
     return [];
   });
 
+  // 이건 장바구니에서만 다뤄도 됨
   const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
+
+  // 이건 전역 관리 필요 => 이거 설정에 따라 페이지 레이아웃이 달라짐
   const [isAdmin, setIsAdmin] = useState(false);
+
+  // 이건 admin 내에서만 다뤄도 됨 => 어드민 페이지에서만 쓰이는 기능
   const [activeTab, setActiveTab] = useState<'products' | 'coupons'>(
     'products',
   );
+
+  // 이건 좀 애매한데.. 헤더에서 검색하고 그 내용이 product List에 반영되어야 함... 흠 ... hook으로 분리?
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
+  // 알림은 전역에서 필요
   const { notifications, addNotification, closeNotification } =
     useNotification();
 
+  // 쿠폰은 장바구니에서 사용, admin에서 관리
   const { coupons } = useManageCoupon(selectedCoupon, setSelectedCoupon);
 
+  // max Applicable Discount인데 장바구니에서 총합 구할 때 사용
+  // 근데 함수 이름은 뭔가 최대할인율을 반영한 가격같은데 동작은 그게 맞나?
   const getMaxApplicableDiscount = (item: CartItem): number => {
     const { discounts } = item.product;
     const { quantity } = item;
@@ -222,39 +235,6 @@ const App = () => {
     [cart, addNotification, getRemainingStock],
   );
 
-  const removeFromCart = useCallback((productId: string) => {
-    setCart((prevCart) =>
-      prevCart.filter((item) => item.product.id !== productId),
-    );
-  }, []);
-
-  const updateQuantity = useCallback(
-    (productId: string, newQuantity: number) => {
-      if (newQuantity <= 0) {
-        removeFromCart(productId);
-        return;
-      }
-
-      const product = products.find((p) => p.id === productId);
-      if (!product) return;
-
-      const maxStock = product.stock;
-      if (newQuantity > maxStock) {
-        addNotification(`재고는 ${maxStock}개까지만 있습니다.`, 'error');
-        return;
-      }
-
-      setCart((prevCart) =>
-        prevCart.map((item) =>
-          item.product.id === productId
-            ? { ...item, quantity: newQuantity }
-            : item,
-        ),
-      );
-    },
-    [products, removeFromCart, addNotification, getRemainingStock],
-  );
-
   return (
     <div className="min-h-screen bg-gray-50">
       {notifications.length > 0 && (
@@ -335,10 +315,9 @@ const App = () => {
             />
 
             <Cart
+              products={products}
               cart={cart}
               setCart={setCart}
-              removeFromCart={removeFromCart}
-              updateQuantity={updateQuantity}
               calculateItemTotal={calculateItemTotal}
               calculateCartTotal={calculateCartTotal}
               selectedCoupon={selectedCoupon}
