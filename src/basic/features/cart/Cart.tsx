@@ -1,13 +1,9 @@
-import { CartItem } from '../../../types';
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { CartItem, Coupon } from '../../../types';
+import { Dispatch, SetStateAction } from 'react';
 import { ProductWithUI } from '../../App';
 import { useManageCoupon } from '../admin/hooks/useManageCoupon';
-import {
-  applyCouponDiscount,
-  calculateCartTotalPrice,
-  calculateItemTotal,
-  checkCouponAvailability,
-} from './cart.service';
+import { calculateItemTotal, checkCouponAvailability } from './cart.service';
+import { useCart } from './hook/useCart';
 
 export const Cart = ({
   cart,
@@ -27,69 +23,23 @@ export const Cart = ({
   const { coupons, selectedCoupon, setSelectedCoupon, applyCoupon } =
     useManageCoupon();
 
-  const updateQuantity = useCallback(
-    (productId: string, newQuantity: number) => {
-      if (newQuantity <= 0) {
-        removeFromCart(productId);
-        return;
-      }
+  const { updateQuantity, removeFromCart, cartTotalPrice, completeOrder } =
+    useCart({
+      products,
+      cart,
+      setCart,
+      addNotification,
+      selectedCoupon,
+      setSelectedCoupon,
+      applyCoupon: (coupon: Coupon) => {
+        applyCoupon(coupon, {
+          onSuccess: () => {
+            addNotification('쿠폰이 적용되었습니다.', 'success');
+          },
+        });
+      },
+    });
 
-      const product = products.find((p) => p.id === productId);
-      if (!product) return;
-
-      const maxStock = product.stock;
-      if (newQuantity > maxStock) {
-        addNotification(`재고는 ${maxStock}개까지만 있습니다.`, 'error');
-        return;
-      }
-
-      setCart((prevCart) =>
-        prevCart.map((item) =>
-          item.product.id === productId
-            ? { ...item, quantity: newQuantity }
-            : item,
-        ),
-      );
-    },
-    [cart, setCart, addNotification],
-  );
-
-  const removeFromCart = useCallback((productId: string) => {
-    setCart((prevCart) =>
-      prevCart.filter((item) => item.product.id !== productId),
-    );
-  }, []);
-
-  const calculateCartTotal = (
-    cart: CartItem[],
-  ): {
-    totalBeforeDiscount: number;
-    totalAfterDiscount: number;
-  } => {
-    const { totalBeforeDiscount, totalAfterDiscount } =
-      calculateCartTotalPrice(cart);
-
-    if (selectedCoupon) {
-      return applyCouponDiscount(selectedCoupon, {
-        totalBeforeDiscount,
-        totalAfterDiscount,
-      });
-    }
-
-    return { totalBeforeDiscount, totalAfterDiscount };
-  };
-
-  const totals = calculateCartTotal(cart);
-
-  const completeOrder = useCallback(() => {
-    const orderNumber = `ORD-${Date.now()}`;
-    addNotification(
-      `주문이 완료되었습니다. 주문번호: ${orderNumber}`,
-      'success',
-    );
-    setCart([]);
-    setSelectedCoupon(null);
-  }, [addNotification]);
   return (
     <div className="lg:col-span-1">
       <div className="sticky top-24 space-y-4">
@@ -229,7 +179,7 @@ export const Cart = ({
 
                     const isCouponAvailable = checkCouponAvailability(
                       coupon,
-                      totals.totalAfterDiscount,
+                      cartTotalPrice.totalAfterDiscount,
                     );
 
                     if (coupon && isCouponAvailable) {
@@ -267,16 +217,19 @@ export const Cart = ({
                 <div className="flex justify-between">
                   <span className="text-gray-600">상품 금액</span>
                   <span className="font-medium">
-                    {totals.totalBeforeDiscount.toLocaleString()}원
+                    {cartTotalPrice.totalBeforeDiscount.toLocaleString()}원
                   </span>
                 </div>
-                {totals.totalBeforeDiscount - totals.totalAfterDiscount > 0 && (
+                {cartTotalPrice.totalBeforeDiscount -
+                  cartTotalPrice.totalAfterDiscount >
+                  0 && (
                   <div className="flex justify-between text-red-500">
                     <span>할인 금액</span>
                     <span>
                       -
                       {(
-                        totals.totalBeforeDiscount - totals.totalAfterDiscount
+                        cartTotalPrice.totalBeforeDiscount -
+                        cartTotalPrice.totalAfterDiscount
                       ).toLocaleString()}
                       원
                     </span>
@@ -285,7 +238,7 @@ export const Cart = ({
                 <div className="flex justify-between py-2 border-t border-gray-200">
                   <span className="font-semibold">결제 예정 금액</span>
                   <span className="font-bold text-lg text-gray-900">
-                    {totals.totalAfterDiscount.toLocaleString()}원
+                    {cartTotalPrice.totalAfterDiscount.toLocaleString()}원
                   </span>
                 </div>
               </div>
@@ -294,7 +247,7 @@ export const Cart = ({
                 onClick={completeOrder}
                 className="w-full mt-4 py-3 bg-yellow-400 text-gray-900 rounded-md font-medium hover:bg-yellow-500 transition-colors"
               >
-                {totals.totalAfterDiscount.toLocaleString()}원 결제하기
+                {cartTotalPrice.totalAfterDiscount.toLocaleString()}원 결제하기
               </button>
 
               <div className="mt-3 text-xs text-gray-500 text-center">
