@@ -56,11 +56,20 @@ export const useManageCoupon = () => {
     setCoupons((prev) => prev.filter((c) => c.code !== couponCode));
   }, []);
 
+  const applyCoupon = useCallback(
+    (coupon: Coupon, { onSuccess }: { onSuccess?: () => void }) => {
+      setSelectedCoupon(coupon);
+      onSuccess?.();
+    },
+    [],
+  );
+
   return {
     addCoupon,
     deleteCoupon,
     coupons,
     selectedCoupon,
     setSelectedCoupon,
+    applyCoupon,
   };
 };

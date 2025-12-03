@@ -18,15 +18,8 @@ export const Cart = ({
     type: 'success' | 'error' | 'warning',
   ) => void;
 }) => {
-  const { coupons, selectedCoupon, setSelectedCoupon } = useManageCoupon();
-
-  const applyCoupon = useCallback(
-    (coupon: Coupon, { onSuccess }: { onSuccess?: () => void }) => {
-      setSelectedCoupon(coupon);
-      onSuccess?.();
-    },
-    [],
-  );
+  const { coupons, selectedCoupon, setSelectedCoupon, applyCoupon } =
+    useManageCoupon();
 
   const completeOrder = useCallback(() => {
     const orderNumber = `ORD-${Date.now()}`;
