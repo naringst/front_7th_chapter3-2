@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
-import { ProductWithUI } from '../../../App';
 import { CartItem, Coupon } from '../../../../types';
 import { applyCouponDiscount, calculateCartTotalPrice } from '../cart.service';
+import { ProductWithUI } from '../../product/hook/useProduct';
 
 export const useCart = ({
   products,

@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
-import { ProductWithUI } from '../../App';
+
 import { useManageCoupon } from './hooks/useManageCoupon';
 import { Coupon } from '../../../types';
+import { ProductWithUI } from '../product/hook/useProduct';
 
 export const Admin = ({
   products,
