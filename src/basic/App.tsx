@@ -19,8 +19,11 @@ export const getRemainingStock = (
 };
 
 const App = () => {
-  // 전체 페이지 단위에서 관리가 필요한 것과, 각 컴포넌트 내부에서 로직 처리가 필요한 내용을 나눠보자!
+  const [isAdmin, setIsAdmin] = useState(false);
+
   const { products, setProducts } = useProduct();
+  const { notifications, addNotification, closeNotification } =
+    useNotification();
 
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('cart');
@@ -33,17 +36,6 @@ const App = () => {
     }
     return [];
   });
-
-  // 이건 전역 관리 필요 => 이거 설정에 따라 페이지 레이아웃이 달라짐
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  // 이건 좀 애매한데.. 헤더에서 검색하고 그 내용이 product List에 반영되어야 함... 흠 ... hook으로 분리?
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-
-  // 알림은 전역에서 필요
-  const { notifications, addNotification, closeNotification } =
-    useNotification();
 
   const [totalItemCount, setTotalItemCount] = useState(0);
 
@@ -59,6 +51,10 @@ const App = () => {
       localStorage.removeItem('cart');
     }
   }, [cart]);
+
+  // 이건 좀 애매한데.. 헤더에서 검색하고 그 내용이 product List에 반영되어야 함... 흠 ... hook으로 분리?
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
