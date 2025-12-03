@@ -4,11 +4,11 @@ import { Admin } from './features/admin';
 import { Header } from './shared/component/Header';
 import { ProductList } from './features/product/ProductList';
 import { Cart } from './features/cart/Cart';
-import { Notification } from './features/notification';
 import { useProduct } from './features/product/hook/useProduct';
 import { useSearchProduct } from './features/product/hook/useSearchProduct';
 import { useCart } from './features/cart/hook/useCart';
 import { useManageCoupon } from './features/admin/hooks/useManageCoupon';
+import { NotificationSection } from './features/notification/NotificationSection';
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -39,17 +39,10 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {notifications.length > 0 && (
-        <div className="fixed top-20 right-4 z-50 space-y-2 max-w-sm">
-          {notifications.map((notif) => (
-            <Notification
-              key={notif.id}
-              notification={notif}
-              closeNotification={closeNotification}
-            />
-          ))}
-        </div>
-      )}
+      <NotificationSection
+        notifications={notifications}
+        closeNotification={closeNotification}
+      />
       <Header
         admin={{
           isAdmin,
