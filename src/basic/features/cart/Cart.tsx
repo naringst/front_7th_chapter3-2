@@ -4,9 +4,9 @@ import { ProductWithUI } from '../../App';
 import { useManageCoupon } from '../admin/hooks/useManageCoupon';
 import { calculateItemTotal, checkCouponAvailability } from './cart.service';
 import { useCart } from './hook/useCart';
-import { CartTitle } from './components/CartTitle';
-import { CartEmptyList } from './components/CartEmptyList';
-import { CartItemList } from './components/CartItemList';
+import { CartTitle } from './components/cart/CartTitle';
+import { CartEmptyList } from './components/cart/CartEmptyList';
+import { CartItemList } from './components/cart/CartItemList';
 
 export const Cart = ({
   cart,
