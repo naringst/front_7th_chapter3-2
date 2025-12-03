@@ -7,6 +7,7 @@ import { ProductList } from './features/product/ProductList';
 import { Cart } from './features/cart/Cart';
 import { Notification } from './features/notification';
 import { ProductWithUI, useProduct } from './features/product/hook/useProduct';
+import { useSearchProduct } from './features/product/hook/useSearchProduct';
 
 export const getRemainingStock = (
   cart: CartItem[],
@@ -24,6 +25,7 @@ const App = () => {
   const { products, setProducts } = useProduct();
   const { notifications, addNotification, closeNotification } =
     useNotification();
+  const { searchTerm, setSearchTerm, debouncedSearchTerm } = useSearchProduct();
 
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('cart');
@@ -51,17 +53,6 @@ const App = () => {
       localStorage.removeItem('cart');
     }
   }, [cart]);
-
-  // 이건 좀 애매한데.. 헤더에서 검색하고 그 내용이 product List에 반영되어야 함... 흠 ... hook으로 분리?
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchTerm]);
 
   const addToCart = useCallback(
     (product: ProductWithUI) => {
