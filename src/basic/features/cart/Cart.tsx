@@ -21,11 +21,11 @@ export const Cart = ({
   const { coupons, selectedCoupon, setSelectedCoupon } = useManageCoupon();
 
   const applyCoupon = useCallback(
-    (coupon: Coupon) => {
+    (coupon: Coupon, { onSuccess }: { onSuccess?: () => void }) => {
       setSelectedCoupon(coupon);
-      addNotification('쿠폰이 적용되었습니다.', 'success');
+      onSuccess?.();
     },
-    [addNotification],
+    [],
   );
 
   const completeOrder = useCallback(() => {
@@ -290,7 +290,11 @@ export const Cart = ({
                     );
 
                     if (coupon && isCouponAvailable) {
-                      applyCoupon(coupon);
+                      applyCoupon(coupon, {
+                        onSuccess: () => {
+                          addNotification('쿠폰이 적용되었습니다.', 'success');
+                        },
+                      });
                     } else {
                       addNotification(
                         'percentage 쿠폰은 10,000원 이상 구매 시 사용 가능합니다.',
