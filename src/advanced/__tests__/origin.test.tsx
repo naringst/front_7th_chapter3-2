@@ -7,19 +7,32 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { vi } from 'vitest';
+import { useSetAtom } from 'jotai';
 import App from '../App';
 import '../../setupTests';
+import { notificationAtom } from '../features/notification/atoms';
+
+// Jotai atom 초기화 헬퍼 컴포넌트
+const AtomReset = () => {
+  const setNotifications = useSetAtom(notificationAtom);
+  setNotifications([]);
+  return null;
+};
 
 describe('쇼핑몰 앱 통합 테스트', () => {
   beforeEach(() => {
     // localStorage 초기화
     localStorage.clear();
+    // Jotai atom 초기화
+    render(<AtomReset />);
     // console 경고 무시
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   afterEach(() => {
+    // Jotai atom 초기화 (테스트 간 상태 격리)
+    render(<AtomReset />);
     vi.restoreAllMocks();
   });
 
