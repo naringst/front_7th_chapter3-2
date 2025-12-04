@@ -1,5 +1,5 @@
 import { Label, Input, Select } from '../../../../shared/component/ui';
-import { useCouponForm } from './useCouponForm';
+import { useCouponForm } from '../../hooks/useCouponForm';
 import { CouponForm } from './AdminCouponList';
 
 interface CouponAddFormProps {

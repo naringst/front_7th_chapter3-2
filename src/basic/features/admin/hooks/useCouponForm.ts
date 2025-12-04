@@ -1,6 +1,9 @@
 import { useCallback, useState } from 'react';
-import { CouponForm } from './AdminCouponList';
-import { validateDiscountValue, validateCouponForm } from './validators';
+import { CouponForm } from '../components/coupons/AdminCouponList';
+import {
+  validateDiscountValue,
+  validateCouponForm,
+} from '../components/service/validators';
 
 const initialForm: CouponForm = {
   name: '',

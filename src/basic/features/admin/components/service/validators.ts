@@ -1,4 +1,4 @@
-import { CouponForm } from './AdminCouponList';
+import { CouponForm } from '../coupons/AdminCouponList';
 
 export interface ValidationError {
   field: keyof CouponForm;
