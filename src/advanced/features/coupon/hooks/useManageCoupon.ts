@@ -1,8 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Coupon } from '../../../../types';
 import { useNotification } from '../../notification/hooks/useNotification';
+import {
+  couponsWithStorageAtom,
+  selectedCouponAtom,
+} from '../atoms/coupon.atom';
+import { useAtom } from 'jotai';
 
-const initialCoupons: Coupon[] = [
+export const initialCoupons: Coupon[] = [
   {
     name: '5000원 할인',
     code: 'AMOUNT5000',
@@ -19,23 +24,8 @@ const initialCoupons: Coupon[] = [
 
 export const useManageCoupon = () => {
   const { addNotification } = useNotification();
-  const [coupons, setCoupons] = useState<Coupon[]>(() => {
-    const saved = localStorage.getItem('coupons');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return initialCoupons;
-      }
-    }
-    return initialCoupons;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('coupons', JSON.stringify(coupons));
-  }, [coupons]);
-
-  const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
+  const [coupons, setCoupons] = useAtom(couponsWithStorageAtom);
+  const [selectedCoupon, setSelectedCoupon] = useAtom(selectedCouponAtom);
   const [showCouponForm, setShowCouponForm] = useState(false);
 
   const addCoupon = useCallback(
@@ -64,7 +54,7 @@ export const useManageCoupon = () => {
       setSelectedCoupon(coupon);
       onSuccess?.();
     },
-    [],
+    [setSelectedCoupon],
   );
 
   const handleDeleteCoupon = (

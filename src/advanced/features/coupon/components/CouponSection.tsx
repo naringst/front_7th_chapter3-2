@@ -1,22 +1,20 @@
-import { Coupon } from '../../../../types';
+import { useAtom, useAtomValue } from 'jotai';
+import {
+  couponsWithStorageAtom,
+  selectedCouponAtom,
+} from '../atoms/coupon.atom';
 import { CouponSelector } from './CouponSelector';
+import { useManageCoupon } from '../hooks/useManageCoupon';
 
 export const CouponSection = ({
-  coupons,
-  selectedCoupon,
-  setSelectedCoupon,
   cartTotalPrice,
-  applyCoupon,
 }: {
-  coupons: Coupon[];
-  selectedCoupon: Coupon | null;
-  setSelectedCoupon: (coupon: Coupon | null) => void;
   cartTotalPrice: { totalBeforeDiscount: number; totalAfterDiscount: number };
-  applyCoupon: (
-    coupon: Coupon,
-    { onSuccess }: { onSuccess?: () => void },
-  ) => void;
 }) => {
+  const { applyCoupon } = useManageCoupon();
+
+  const [selectedCoupon, setSelectedCoupon] = useAtom(selectedCouponAtom);
+  const coupons = useAtomValue(couponsWithStorageAtom);
   return (
     <section className="bg-white rounded-lg border border-gray-200 p-4">
       <div className="flex items-center justify-between mb-3">

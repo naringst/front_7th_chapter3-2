@@ -40,7 +40,9 @@ export const couponsWithStorageAtom = atom(
   (get, set, newCoupons: Coupon[] | ((prev: Coupon[]) => Coupon[])) => {
     const currentCoupons = get(couponsAtom);
     const updatedCoupons =
-      typeof newCoupons === 'function' ? newCoupons(currentCoupons) : newCoupons;
+      typeof newCoupons === 'function'
+        ? newCoupons(currentCoupons)
+        : newCoupons;
 
     set(couponsAtom, updatedCoupons);
 
@@ -53,4 +55,3 @@ export const couponsWithStorageAtom = atom(
 
 // 선택된 쿠폰 atom
 export const selectedCouponAtom = atom<Coupon | null>(null);
-

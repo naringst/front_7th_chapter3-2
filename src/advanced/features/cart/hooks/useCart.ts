@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useCallback } from 'react';
-import { CartItem, Coupon, Product } from '../../../../types';
+import { useCallback } from 'react';
+import { CartItem, Product } from '../../../../types';
 import { calculateCartTotalPrice } from '../service/cart.service';
 import { applyCouponDiscount } from '../../coupon/services/coupon.service';
 import { ProductWithUI } from '../../product/hooks/useProduct';
@@ -9,21 +9,13 @@ import {
   totalCartItemCountAtom,
 } from '../atoms/cart.atom';
 import { useAtom, useAtomValue } from 'jotai';
+import { selectedCouponAtom } from '../../coupon/atoms/coupon.atom';
 
-export const useCart = ({
-  products,
-  selectedCoupon,
-  setSelectedCoupon,
-}: {
-  products: ProductWithUI[];
-
-  selectedCoupon: Coupon | null;
-  setSelectedCoupon: Dispatch<SetStateAction<Coupon | null>>;
-}) => {
+export const useCart = ({ products }: { products: ProductWithUI[] }) => {
   const { addNotification } = useNotification();
   const [cart, setCart] = useAtom(cartWithStorageAtom);
   const totalItemCount = useAtomValue(totalCartItemCountAtom);
-
+  const [selectedCoupon, setSelectedCoupon] = useAtom(selectedCouponAtom);
   const updateQuantity = useCallback(
     (productId: string, newQuantity: number) => {
       if (newQuantity <= 0) {

@@ -13,15 +13,25 @@ import '../../setupTests';
 import { notificationAtom } from '../features/notification/atoms';
 import { cartAtom } from '../features/cart/atoms/cart.atom';
 import { isAdminAtom } from '../shared/atoms';
+import {
+  couponsWithStorageAtom,
+  selectedCouponAtom,
+} from '../features/coupon/atoms/coupon.atom';
+import { initialCoupons } from '../features/coupon/hooks/useManageCoupon';
 
 // Jotai atom 초기화 헬퍼 컴포넌트
 const AtomReset = () => {
   const setNotifications = useSetAtom(notificationAtom);
   const setCart = useSetAtom(cartAtom);
   const setIsAdmin = useSetAtom(isAdminAtom);
+  const setSelectedCoupon = useSetAtom(selectedCouponAtom);
+  const setCoupons = useSetAtom(couponsWithStorageAtom);
+
   setNotifications([]);
   setCart([]);
   setIsAdmin(false);
+  setSelectedCoupon(null);
+  setCoupons(initialCoupons);
   return null;
 };
 

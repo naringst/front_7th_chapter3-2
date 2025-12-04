@@ -4,14 +4,10 @@ import { Header } from '../../shared/component/Header';
 import { useProduct } from '../../features/product/hooks/useProduct';
 import { useSearchProduct } from '../../features/product/hooks/useSearchProduct';
 import { useCart } from '../../features/cart/hooks/useCart';
-import { useManageCoupon } from '../../features/coupon/hooks/useManageCoupon';
 
 export const ShopPage = () => {
   const { products } = useProduct();
   const { debouncedSearchTerm, searchTerm, setSearchTerm } = useSearchProduct();
-
-  const { coupons, applyCoupon, selectedCoupon, setSelectedCoupon } =
-    useManageCoupon();
 
   const {
     cart,
@@ -24,8 +20,6 @@ export const ShopPage = () => {
     getRemainingStock,
   } = useCart({
     products,
-    selectedCoupon,
-    setSelectedCoupon,
   });
 
   return (
@@ -68,12 +62,6 @@ export const ShopPage = () => {
               updateQuantity,
               removeFromCart,
               completeOrder,
-            }}
-            coupon={{
-              selectedCoupon,
-              setSelectedCoupon,
-              coupons,
-              applyCoupon,
             }}
           />
         </div>
