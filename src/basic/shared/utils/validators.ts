@@ -1,5 +1,5 @@
-import { CouponForm } from '../coupons/AdminCouponList';
-import { ProductForm } from '../products/AdminProductList';
+import { CouponForm } from '../../features/admin/components/coupons/AdminCouponList';
+import { ProductForm } from '../../features/product/admin/AdminProductList';
 
 export interface ValidationError {
   field: keyof CouponForm | keyof ProductForm;

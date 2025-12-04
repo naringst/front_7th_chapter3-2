@@ -1,5 +1,5 @@
-import { formatPrice } from '../../../../shared/utils/priceUtils';
-import { ProductWithUI } from '../../../product/hook/useProduct';
+import { formatPrice } from '../../../shared/utils/priceUtils';
+import { ProductWithUI } from '../../hook/useProduct';
 
 export const AdminProductTable = ({
   products,

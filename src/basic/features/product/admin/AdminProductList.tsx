@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ProductWithUI } from '../../../product/hook/useProduct';
+import { ProductWithUI } from '../hook/useProduct';
 import { AddNewProductButton } from './AddNewProductButton';
 import { ProductAddForm } from './ProductAddForm';
 import { AdminProductTable } from './AdminProductTable';
-import { useManageProducts } from '../../hooks/useManageProducts';
+import { useManageProducts } from '../hooks/useManageProducts';
 
 export interface ProductForm {
   name: string;

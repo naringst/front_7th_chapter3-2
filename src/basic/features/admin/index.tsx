@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { ProductWithUI } from '../product/hook/useProduct';
 import { AdminTitle } from './components/AdminTitle';
 import { AdminViewTab } from './components/AdminViewTab';
-import { AdminProductList } from './components/products/AdminProductList';
+import { AdminProductList } from '../product/admin/AdminProductList';
 import { AdminCouponList } from './components/coupons/AdminCouponList';
 
 export const Admin = ({

@@ -3,7 +3,7 @@ import { CouponForm } from '../components/coupons/AdminCouponList';
 import {
   validateDiscountValue,
   validateCouponForm,
-} from '../components/service/validators';
+} from '../../../shared/utils/validators';
 
 const initialForm: CouponForm = {
   name: '',
