@@ -1,5 +1,5 @@
 import { Label, Input } from '../../../shared/component/ui';
-import { useProductForm } from '../hooks/useProductForm';
+import { useProductForm } from './hooks/useProductForm';
 import { ProductForm } from './AdminProductList';
 
 interface ProductAddFormProps {

@@ -1,10 +1,10 @@
 import { useCallback, useState, useEffect } from 'react';
-import { ProductForm } from '../admin/AdminProductList';
+import { ProductForm } from '../AdminProductList';
 import {
   validateProductForm,
   validatePrice,
   validateStock,
-} from '../../../shared/utils/validators';
+} from '../../../../shared/utils/validators';
 
 const initialForm: ProductForm = {
   name: '',
