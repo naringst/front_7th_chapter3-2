@@ -21,7 +21,7 @@ export const validateCouponForm = (
     if (form.discountValue > 100) {
       return {
         field: 'discountValue',
-        message: '할인율은 100%를 초과할 수 없습니다.',
+        message: '할인율은 100%를 초과할 수 없습니다',
       };
     }
     if (form.discountValue < 0) {
@@ -57,7 +57,7 @@ export const validateDiscountValue = (
       return {
         isValid: false,
         correctedValue: 100,
-        message: '할인율은 100%를 초과할 수 없습니다.',
+        message: '할인율은 100%를 초과할 수 없습니다',
       };
     }
     if (value < 0) {

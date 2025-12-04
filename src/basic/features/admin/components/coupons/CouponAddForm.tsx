@@ -78,9 +78,8 @@ export const CouponAddForm = ({
                   );
                 }
               }}
-              onBlur={(e) => {
-                const value = parseInt(e.target.value) || 0;
-                handleDiscountValueBlur(value);
+              onBlur={() => {
+                handleDiscountValueBlur(form.discountValue);
               }}
               placeholder={form.discountType === 'amount' ? '5000' : '10'}
               required
