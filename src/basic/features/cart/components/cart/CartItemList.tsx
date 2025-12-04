@@ -24,42 +24,21 @@ export const CartItemList = ({
         <h4 className="text-sm font-medium text-gray-900 flex-1">
           {item.product.name}
         </h4>
-        <button
-          onClick={() => removeFromCart(item.product.id)}
-          className="text-gray-400 hover:text-red-500 ml-2"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+        <DeleteButton onClick={() => removeFromCart(item.product.id)} />
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <button
+          <Button
             onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-            className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100"
-          >
-            <span className="text-xs">−</span>
-          </button>
+            children={<span className="text-xs">−</span>}
+          />
           <span className="mx-3 text-sm font-medium w-8 text-center">
             {item.quantity}
           </span>
-          <button
+          <Button
             onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-            className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100"
-          >
-            <span className="text-xs">+</span>
-          </button>
+            children={<span className="text-xs">+</span>}
+          />
         </div>
         <div className="text-right">
           {hasDiscount && (
@@ -73,5 +52,42 @@ export const CartItemList = ({
         </div>
       </div>
     </div>
+  );
+};
+
+const DeleteButton = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <button onClick={onClick} className="text-gray-400 hover:text-red-500 ml-2">
+      <svg
+        className="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+  );
+};
+
+const Button = ({
+  onClick,
+  children,
+}: {
+  onClick: () => void;
+  children: React.ReactNode;
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+    >
+      {children}
+    </button>
   );
 };
