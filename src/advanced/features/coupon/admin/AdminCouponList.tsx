@@ -19,7 +19,7 @@ export const AdminCouponList = () => {
     toggleShowCouponForm,
     handleDeleteCoupon,
     showCouponForm,
-  } = useManageCoupon({ addNotification });
+  } = useManageCoupon();
 
   return (
     <section className="bg-white rounded-lg border border-gray-200">

@@ -5,7 +5,6 @@ import { applyCouponDiscount } from '../../coupon/services/coupon.service';
 import { ProductWithUI } from '../../product/hooks/useProduct';
 import { useNotification } from '../../notification/hooks/useNotification';
 import {
-  cartAtom,
   cartWithStorageAtom,
   totalCartItemCountAtom,
 } from '../atoms/cart.atom';

@@ -11,7 +11,7 @@ export const ShopPage = () => {
   const { debouncedSearchTerm, searchTerm, setSearchTerm } = useSearchProduct();
 
   const { coupons, applyCoupon, selectedCoupon, setSelectedCoupon } =
-    useManageCoupon({});
+    useManageCoupon();
 
   const {
     cart,

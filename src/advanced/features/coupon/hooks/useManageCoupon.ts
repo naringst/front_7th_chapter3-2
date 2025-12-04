@@ -17,9 +17,7 @@ const initialCoupons: Coupon[] = [
   },
 ];
 
-interface UseManageCouponOptions {}
-
-export const useManageCoupon = ({}: UseManageCouponOptions) => {
+export const useManageCoupon = () => {
   const { addNotification } = useNotification();
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
     const saved = localStorage.getItem('coupons');

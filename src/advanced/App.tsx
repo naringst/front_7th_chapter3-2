@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Notification } from './features/notification/index';
 import { AdminPage } from './pages/admin/AdminPage';
 import { ShopPage } from './pages/shop/ShopPage';
@@ -7,6 +6,7 @@ import { useAtomValue } from 'jotai';
 
 const App = () => {
   const isAdmin = useAtomValue(isAdminAtom);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Notification />
