@@ -40,9 +40,6 @@ export const ShopPage = ({ isAdmin, setIsAdmin }: ShopPageProps) => {
           isAdmin,
           setIsAdmin,
         }}
-        cart={{
-          totalCartItemCount: totalItemCount,
-        }}
         search={{
           searchInput: (
             <div className="ml-8 flex-1 max-w-md">

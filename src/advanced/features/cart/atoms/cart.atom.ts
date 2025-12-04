@@ -41,7 +41,7 @@ export const cartWithStorageAtom = atom(
 );
 
 // 장바구니 총 아이템 개수 (derived atom)
-export const cartItemCountAtom = atom((get) => {
+export const totalCartItemCountAtom = atom((get) => {
   const cart = get(cartAtom);
   return cart.reduce((sum, item) => sum + item.quantity, 0);
 });

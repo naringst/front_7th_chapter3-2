@@ -17,9 +17,6 @@ export const AdminPage = ({ isAdmin, setIsAdmin }: AdminPageProps) => {
           isAdmin,
           setIsAdmin,
         }}
-        cart={{
-          totalCartItemCount: 0,
-        }}
       />
       <main className="max-w-7xl mx-auto px-4 py-8">
         <AdminDashboard products={products} setProducts={setProducts} />

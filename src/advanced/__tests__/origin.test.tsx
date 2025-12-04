@@ -11,11 +11,14 @@ import { useSetAtom } from 'jotai';
 import App from '../App';
 import '../../setupTests';
 import { notificationAtom } from '../features/notification/atoms';
+import { cartAtom } from '../features/cart/atoms/cart.atom';
 
 // Jotai atom 초기화 헬퍼 컴포넌트
 const AtomReset = () => {
   const setNotifications = useSetAtom(notificationAtom);
+  const setCart = useSetAtom(cartAtom);
   setNotifications([]);
+  setCart([]);
   return null;
 };
 
