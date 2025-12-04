@@ -1,62 +1,54 @@
-import { useManageCoupon } from '../admin/hooks/useManageCoupon';
-
-import { useCart } from './hook/useCart';
-
 import { CouponSection } from './components/coupon/CouponSection';
 import { PaymentSection } from './components/payment/PaymentSection';
 import { CartSection } from './components/cart/CartSection';
 import { CartItem, Coupon } from '../../../types';
 import { Dispatch, SetStateAction } from 'react';
 
-export const Cart = ({
-  cart,
-  selectedCoupon,
-  setSelectedCoupon,
-  cartTotalPrice,
-  updateQuantity,
-  removeFromCart,
-  completeOrder,
+export interface CartProps {
+  cart: {
+    items: CartItem[];
+    totalPrice: { totalBeforeDiscount: number; totalAfterDiscount: number };
+    totalItemCount: number;
+  };
+  cartActions: {
+    updateQuantity: (productId: string, quantity: number) => void;
+    removeFromCart: (productId: string) => void;
+    completeOrder: () => void;
+  };
+  coupon: {
+    selectedCoupon: Coupon | null;
+    setSelectedCoupon: Dispatch<SetStateAction<Coupon | null>>;
+    coupons: Coupon[];
+    applyCoupon: (
+      coupon: Coupon,
+      { onSuccess }: { onSuccess?: () => void },
+    ) => void;
+  };
+}
 
-  coupons,
-  applyCoupon,
-}: {
-  cart: CartItem[];
-  setCart: Dispatch<SetStateAction<CartItem[]>>;
-  cartTotalPrice: { totalBeforeDiscount: number; totalAfterDiscount: number };
-  totalItemCount: number;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeFromCart: (productId: string) => void;
-  completeOrder: () => void;
-  selectedCoupon: Coupon | null;
-  setSelectedCoupon: Dispatch<SetStateAction<Coupon | null>>;
-  coupons: Coupon[];
-  applyCoupon: (
-    coupon: Coupon,
-    { onSuccess }: { onSuccess?: () => void },
-  ) => void;
-}) => {
+export const Cart = ({ cart, cartActions, coupon }: CartProps) => {
   return (
     <div className="lg:col-span-1">
       <div className="sticky top-24 space-y-4">
         <CartSection
-          cart={cart}
-          removeFromCart={removeFromCart}
-          updateQuantity={updateQuantity}
+          cart={cart.items}
+          removeFromCart={cartActions.removeFromCart}
+          updateQuantity={cartActions.updateQuantity}
         />
 
-        {cart.length > 0 && (
+        {cart.items.length > 0 && (
           <>
             <CouponSection
-              selectedCoupon={selectedCoupon}
-              setSelectedCoupon={setSelectedCoupon}
-              coupons={coupons}
-              cartTotalPrice={cartTotalPrice}
-              applyCoupon={applyCoupon}
+              selectedCoupon={coupon.selectedCoupon}
+              setSelectedCoupon={coupon.setSelectedCoupon}
+              coupons={coupon.coupons}
+              cartTotalPrice={cart.totalPrice}
+              applyCoupon={coupon.applyCoupon}
             />
 
             <PaymentSection
-              cartTotalPrice={cartTotalPrice}
-              completeOrder={completeOrder}
+              cartTotalPrice={cart.totalPrice}
+              completeOrder={cartActions.completeOrder}
             />
           </>
         )}

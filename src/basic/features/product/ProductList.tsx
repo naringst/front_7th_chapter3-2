@@ -1,6 +1,29 @@
 import { Product } from '../../../types';
 import { ProductItem } from './ProductItem';
 
+export interface ProductListProps {
+  products: Product[];
+  search: {
+    debouncedSearchTerm: string;
+  };
+  cartActions: {
+    addToCart: (
+      product: Product,
+      onSuccess?: (
+        message: string,
+        type: 'success' | 'error' | 'warning',
+      ) => void,
+    ) => void;
+    getRemainingStock: (product: Product) => number;
+  };
+  notification: {
+    addNotification: (
+      message: string,
+      type: 'success' | 'error' | 'warning',
+    ) => void;
+  };
+}
+
 const ProductListHeader = ({
   productsTotalCount,
 }: {
@@ -32,36 +55,20 @@ const ProductListEmpty = ({
 
 export const ProductList = ({
   products,
-  debouncedSearchTerm,
-  addToCart,
-  getRemainingStock,
-  addNotification,
-}: {
-  products: Product[];
-  debouncedSearchTerm: string;
-  addToCart: (
-    product: Product,
-    onSuccess?: (
-      message: string,
-      type: 'success' | 'error' | 'warning',
-    ) => void,
-  ) => void;
-  getRemainingStock: (product: Product) => number;
-  addNotification: (
-    message: string,
-    type: 'success' | 'error' | 'warning',
-  ) => void;
-}) => {
-  const filteredProducts = debouncedSearchTerm
+  search,
+  cartActions,
+  notification,
+}: ProductListProps) => {
+  const filteredProducts = search.debouncedSearchTerm
     ? products.filter(
         (product) =>
           product.name
             .toLowerCase()
-            .includes(debouncedSearchTerm.toLowerCase()) ||
+            .includes(search.debouncedSearchTerm.toLowerCase()) ||
           (product.description &&
             product.description
               .toLowerCase()
-              .includes(debouncedSearchTerm.toLowerCase())),
+              .includes(search.debouncedSearchTerm.toLowerCase())),
       )
     : products;
 
@@ -70,17 +77,18 @@ export const ProductList = ({
       <ProductListHeader productsTotalCount={products.length} />
       <section>
         {filteredProducts.length === 0 ? (
-          <ProductListEmpty debouncedSearchTerm={debouncedSearchTerm} />
+          <ProductListEmpty debouncedSearchTerm={search.debouncedSearchTerm} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredProducts.map((product) => {
-              const remainingStock = getRemainingStock(product);
+              const remainingStock = cartActions.getRemainingStock(product);
               return (
                 <ProductItem
+                  key={product.id}
                   product={product}
                   remainingStock={remainingStock}
-                  addToCart={addToCart}
-                  addNotification={addNotification}
+                  addToCart={cartActions.addToCart}
+                  addNotification={notification.addNotification}
                 />
               );
             })}

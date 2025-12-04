@@ -22,7 +22,6 @@ const App = () => {
 
   const {
     cart,
-    setCart,
     totalItemCount,
     cartTotalPrice,
     updateQuantity,
@@ -77,24 +76,36 @@ const App = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <ProductList
               products={products}
-              debouncedSearchTerm={debouncedSearchTerm}
-              addToCart={addToCart}
-              getRemainingStock={(product) => getRemainingStock(cart, product)}
-              addNotification={addNotification}
+              search={{
+                debouncedSearchTerm,
+              }}
+              cartActions={{
+                addToCart,
+                getRemainingStock: (product) =>
+                  getRemainingStock(cart, product),
+              }}
+              notification={{
+                addNotification,
+              }}
             />
 
             <Cart
-              cart={cart}
-              setCart={setCart}
-              cartTotalPrice={cartTotalPrice}
-              totalItemCount={totalItemCount}
-              updateQuantity={updateQuantity}
-              removeFromCart={removeFromCart}
-              completeOrder={completeOrder}
-              selectedCoupon={selectedCoupon}
-              setSelectedCoupon={setSelectedCoupon}
-              coupons={coupons}
-              applyCoupon={applyCoupon}
+              cart={{
+                items: cart,
+                totalPrice: cartTotalPrice,
+                totalItemCount,
+              }}
+              cartActions={{
+                updateQuantity,
+                removeFromCart,
+                completeOrder,
+              }}
+              coupon={{
+                selectedCoupon,
+                setSelectedCoupon,
+                coupons,
+                applyCoupon,
+              }}
             />
           </div>
         )}
