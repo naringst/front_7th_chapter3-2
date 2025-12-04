@@ -1,26 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Coupon } from '../../../../types';
 import { useNotification } from '../../../shared/hooks/useNotification';
+import { CouponForm } from '../components/coupons/AdminCouponList';
+
+const initialCoupons: Coupon[] = [
+  {
+    name: '5000원 할인',
+    code: 'AMOUNT5000',
+    discountType: 'amount',
+    discountValue: 5000,
+  },
+  {
+    name: '10% 할인',
+    code: 'PERCENT10',
+    discountType: 'percentage',
+    discountValue: 10,
+  },
+];
 
 export const useManageCoupon = () => {
   const { addNotification } = useNotification();
-
-  const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
-
-  const initialCoupons: Coupon[] = [
-    {
-      name: '5000원 할인',
-      code: 'AMOUNT5000',
-      discountType: 'amount',
-      discountValue: 5000,
-    },
-    {
-      name: '10% 할인',
-      code: 'PERCENT10',
-      discountType: 'percentage',
-      discountValue: 10,
-    },
-  ];
 
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
     const saved = localStorage.getItem('coupons');
@@ -38,6 +37,15 @@ export const useManageCoupon = () => {
     localStorage.setItem('coupons', JSON.stringify(coupons));
   }, [coupons]);
 
+  const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
+  const [showCouponForm, setShowCouponForm] = useState(false);
+  const [couponForm, setCouponForm] = useState<CouponForm>({
+    name: '',
+    code: '',
+    discountType: 'amount',
+    discountValue: 0,
+  });
+
   const addCoupon = useCallback(
     (newCoupon: Coupon) => {
       const existingCoupon = coupons.find((c) => c.code === newCoupon.code);
@@ -51,6 +59,53 @@ export const useManageCoupon = () => {
     [coupons, addNotification],
   );
 
+  const handleCouponSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    addCoupon(couponForm);
+    setCouponForm({
+      name: '',
+      code: '',
+      discountType: 'amount',
+      discountValue: 0,
+    });
+    setShowCouponForm(false);
+  };
+
+  const toggleShowCouponForm = () => {
+    setShowCouponForm((prev) => !prev);
+  };
+
+  const onBlurCouponForm = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value) || 0;
+    if (couponForm.discountType === 'percentage') {
+      if (value > 100) {
+        addNotification('할인율은 100%를 초과할 수 없습니다', 'error');
+        setCouponForm({
+          ...couponForm,
+          discountValue: 100,
+        });
+      } else if (value < 0) {
+        setCouponForm({
+          ...couponForm,
+          discountValue: 0,
+        });
+      }
+    } else {
+      if (value > 100000) {
+        addNotification('할인 금액은 100,000원을 초과할 수 없습니다', 'error');
+        setCouponForm({
+          ...couponForm,
+          discountValue: 100000,
+        });
+      } else if (value < 0) {
+        setCouponForm({
+          ...couponForm,
+          discountValue: 0,
+        });
+      }
+    }
+  };
+
   const deleteCoupon = useCallback((couponCode: string) => {
     setCoupons((prev) => prev.filter((c) => c.code !== couponCode));
   }, []);
@@ -63,12 +118,31 @@ export const useManageCoupon = () => {
     [],
   );
 
+  const handleDeleteCoupon = (
+    couponCode: string,
+    {
+      onSuccess,
+    }: { onSuccess?: (message: string, type: 'success' | 'error') => void },
+  ) => {
+    deleteCoupon(couponCode);
+    if (selectedCoupon?.code === couponCode) {
+      setSelectedCoupon(null);
+    }
+
+    onSuccess?.('쿠폰이 삭제되었습니다.', 'success');
+  };
+
   return {
-    addCoupon,
-    deleteCoupon,
     coupons,
     selectedCoupon,
     setSelectedCoupon,
     applyCoupon,
+    handleCouponSubmit,
+    toggleShowCouponForm,
+    onBlurCouponForm,
+    handleDeleteCoupon,
+    couponForm,
+    setCouponForm,
+    showCouponForm,
   };
 };
