@@ -9,23 +9,19 @@ import { CartItem, Coupon, Product } from '../../../../types';
 import { calculateCartTotalPrice } from '../service/cart.service';
 import { applyCouponDiscount } from '../../coupon/services/coupon.service';
 import { ProductWithUI } from '../../product/hooks/useProduct';
+import { useNotification } from '../../notification/hooks/useNotification';
 
 export const useCart = ({
   products,
-  addNotification,
   selectedCoupon,
   setSelectedCoupon,
 }: {
   products: ProductWithUI[];
 
-  addNotification: (
-    message: string,
-    type: 'success' | 'error' | 'warning',
-  ) => void;
-
   selectedCoupon: Coupon | null;
   setSelectedCoupon: Dispatch<SetStateAction<Coupon | null>>;
 }) => {
+  const { addNotification } = useNotification();
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('cart');
     if (saved) {

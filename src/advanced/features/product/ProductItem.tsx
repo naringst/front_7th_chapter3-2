@@ -1,4 +1,5 @@
 import { formatPrice } from '../../shared/utils/priceUtils';
+import { useNotification } from '../notification/hooks/useNotification';
 import { ProductWithUI } from './hooks/useProduct';
 
 const ProductImage = () => {
@@ -84,7 +85,6 @@ const CartButton = ({
   product,
   remainingStock,
   addToCart,
-  addNotification,
 }: {
   product: ProductWithUI;
   remainingStock: number;
@@ -95,11 +95,8 @@ const CartButton = ({
       type: 'success' | 'error' | 'warning',
     ) => void,
   ) => void;
-  addNotification: (
-    message: string,
-    type: 'success' | 'error' | 'warning',
-  ) => void;
 }) => {
+  const { addNotification } = useNotification();
   return (
     <button
       onClick={() =>
@@ -123,7 +120,6 @@ export const ProductItem = ({
   product,
   remainingStock,
   addToCart,
-  addNotification,
 }: {
   product: ProductWithUI;
   remainingStock: number;
@@ -133,10 +129,6 @@ export const ProductItem = ({
       message: string,
       type: 'success' | 'error' | 'warning',
     ) => void,
-  ) => void;
-  addNotification: (
-    message: string,
-    type: 'success' | 'error' | 'warning',
   ) => void;
 }) => {
   return (
@@ -163,7 +155,6 @@ export const ProductItem = ({
           product={product}
           remainingStock={remainingStock}
           addToCart={addToCart}
-          addNotification={addNotification}
         />
       </div>
     </div>

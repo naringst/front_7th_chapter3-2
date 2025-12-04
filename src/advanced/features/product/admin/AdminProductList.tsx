@@ -4,6 +4,7 @@ import { AddNewProductButton } from './AddNewProductButton';
 import { ProductAddForm } from './ProductAddForm';
 import { AdminProductTable } from './AdminProductTable';
 import { useManageProducts } from './hooks/useManageProducts';
+import { useNotification } from '../../notification/hooks/useNotification';
 
 export interface ProductForm {
   name: string;
@@ -16,11 +17,9 @@ export interface ProductForm {
 export const AdminProductList = ({
   products,
   setProducts,
-  addNotification,
 }: {
   products: ProductWithUI[];
   setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
-  addNotification: (message: string, type: 'success' | 'error') => void;
 }) => {
   const {
     handleAddNewProduct,
@@ -33,8 +32,9 @@ export const AdminProductList = ({
     setShowProductForm,
     setEditingProduct,
     showProductForm,
-  } = useManageProducts({ products, setProducts, addNotification });
+  } = useManageProducts({ products, setProducts });
 
+  const { addNotification } = useNotification();
   return (
     <section className="bg-white rounded-lg border border-gray-200">
       <div className="p-6 border-b border-gray-200">

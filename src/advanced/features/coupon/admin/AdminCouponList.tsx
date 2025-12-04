@@ -3,6 +3,7 @@ import { Coupon } from '../../../../types';
 import { AddNewCouponCard } from './AddNewCouponCard';
 import { CouponAddForm } from './CouponAddForm';
 import { CouponCard } from './CouponCard';
+import { useNotification } from '../../notification/hooks/useNotification';
 
 export interface CouponForm {
   name: string;
@@ -10,14 +11,8 @@ export interface CouponForm {
   discountType: 'amount' | 'percentage';
   discountValue: number;
 }
-export const AdminCouponList = ({
-  addNotification,
-}: {
-  addNotification: (
-    message: string,
-    type: 'success' | 'error' | 'warning',
-  ) => void;
-}) => {
+export const AdminCouponList = () => {
+  const { addNotification } = useNotification();
   const {
     coupons,
     addCoupon,

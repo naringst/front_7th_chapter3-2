@@ -9,21 +9,14 @@ import { useManageCoupon } from '../../features/coupon/hooks/useManageCoupon';
 interface ShopPageProps {
   isAdmin: boolean;
   setIsAdmin: (isAdmin: boolean) => void;
-  addNotification: (
-    message: string,
-    type: 'success' | 'error' | 'warning',
-  ) => void;
 }
 
-export const ShopPage = ({
-  isAdmin,
-  setIsAdmin,
-  addNotification,
-}: ShopPageProps) => {
+export const ShopPage = ({ isAdmin, setIsAdmin }: ShopPageProps) => {
   const { products } = useProduct();
   const { debouncedSearchTerm, searchTerm, setSearchTerm } = useSearchProduct();
+
   const { coupons, applyCoupon, selectedCoupon, setSelectedCoupon } =
-    useManageCoupon({ addNotification });
+    useManageCoupon({});
 
   const {
     cart,
@@ -36,7 +29,6 @@ export const ShopPage = ({
     getRemainingStock,
   } = useCart({
     products,
-    addNotification,
     selectedCoupon,
     setSelectedCoupon,
   });
@@ -75,9 +67,6 @@ export const ShopPage = ({
             cartActions={{
               addToCart,
               getRemainingStock: (product) => getRemainingStock(cart, product),
-            }}
-            notification={{
-              addNotification,
             }}
           />
 

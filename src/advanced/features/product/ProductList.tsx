@@ -16,12 +16,6 @@ export interface ProductListProps {
     ) => void;
     getRemainingStock: (product: Product) => number;
   };
-  notification: {
-    addNotification: (
-      message: string,
-      type: 'success' | 'error' | 'warning',
-    ) => void;
-  };
 }
 
 const ProductListHeader = ({
@@ -57,7 +51,6 @@ export const ProductList = ({
   products,
   search,
   cartActions,
-  notification,
 }: ProductListProps) => {
   const filteredProducts = search.debouncedSearchTerm
     ? products.filter(
@@ -88,7 +81,6 @@ export const ProductList = ({
                   product={product}
                   remainingStock={remainingStock}
                   addToCart={cartActions.addToCart}
-                  addNotification={notification.addNotification}
                 />
               );
             })}

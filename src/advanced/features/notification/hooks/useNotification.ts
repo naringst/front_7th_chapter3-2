@@ -1,4 +1,6 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import { notificationAtom } from '../atoms';
+import { useAtom } from 'jotai';
 
 export interface NotificationType {
   id: string;
@@ -7,7 +9,7 @@ export interface NotificationType {
 }
 
 export const useNotification = () => {
-  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const [notifications, setNotifications] = useAtom(notificationAtom);
 
   const addNotification = useCallback(
     (message: string, type: 'error' | 'success' | 'warning' = 'success') => {
@@ -18,12 +20,15 @@ export const useNotification = () => {
         setNotifications((prev) => prev.filter((n) => n.id !== id));
       }, 3000);
     },
-    [],
+    [setNotifications],
   );
 
-  const closeNotification = useCallback((id: string) => {
-    setNotifications((prev) => prev.filter((noti) => noti.id !== id));
-  }, []);
+  const closeNotification = useCallback(
+    (id: string) => {
+      setNotifications((prev) => prev.filter((noti) => noti.id !== id));
+    },
+    [setNotifications],
+  );
 
   return { addNotification, notifications, closeNotification };
 };

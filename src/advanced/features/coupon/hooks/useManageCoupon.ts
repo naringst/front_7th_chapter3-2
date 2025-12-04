@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Coupon } from '../../../types';
+import { Coupon } from '../../../../types';
+import { useNotification } from '../../notification/hooks/useNotification';
 
 const initialCoupons: Coupon[] = [
   {
@@ -16,16 +17,10 @@ const initialCoupons: Coupon[] = [
   },
 ];
 
-interface UseManageCouponOptions {
-  addNotification: (
-    message: string,
-    type: 'success' | 'error' | 'warning',
-  ) => void;
-}
+interface UseManageCouponOptions {}
 
-export const useManageCoupon = ({
-  addNotification,
-}: UseManageCouponOptions) => {
+export const useManageCoupon = ({}: UseManageCouponOptions) => {
+  const { addNotification } = useNotification();
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
     const saved = localStorage.getItem('coupons');
     if (saved) {

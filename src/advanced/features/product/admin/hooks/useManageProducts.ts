@@ -1,16 +1,16 @@
 import { useState, useCallback, SetStateAction, Dispatch } from 'react';
 import { ProductWithUI } from '../../hooks/useProduct';
 import { ProductForm } from '../AdminProductList';
+import { useNotification } from '../../../notification/hooks/useNotification';
 
 export const useManageProducts = ({
   products,
   setProducts,
-  addNotification,
 }: {
   products: ProductWithUI[];
   setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
-  addNotification: (message: string, type: 'success' | 'error') => void;
 }) => {
+  const { addNotification } = useNotification();
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<string | null>(null);
 

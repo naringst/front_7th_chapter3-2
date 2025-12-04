@@ -45,4 +45,3 @@ export const cartItemCountAtom = atom((get) => {
   const cart = get(cartAtom);
   return cart.reduce((sum, item) => sum + item.quantity, 0);
 });
-

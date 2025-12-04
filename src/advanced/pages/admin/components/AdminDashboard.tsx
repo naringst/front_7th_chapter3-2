@@ -8,14 +8,9 @@ import { AdminCouponList } from '../../../features/coupon/admin/AdminCouponList'
 export const AdminDashboard = ({
   products,
   setProducts,
-  addNotification,
 }: {
   products: ProductWithUI[];
   setProducts: Dispatch<SetStateAction<ProductWithUI[]>>;
-  addNotification: (
-    message: string,
-    type: 'error' | 'success' | 'warning',
-  ) => void;
 }) => {
   const [activeTab, setActiveTab] = useState<'products' | 'coupons'>(
     'products',
@@ -44,13 +39,9 @@ export const AdminDashboard = ({
       />
 
       {activeTab === 'products' ? (
-        <AdminProductList
-          products={products}
-          setProducts={setProducts}
-          addNotification={addNotification}
-        />
+        <AdminProductList products={products} setProducts={setProducts} />
       ) : (
-        <AdminCouponList addNotification={addNotification} />
+        <AdminCouponList />
       )}
     </div>
   );

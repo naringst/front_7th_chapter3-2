@@ -1,13 +1,8 @@
 import { NotificationToast } from './components/NotificationToast';
-import { NotificationType } from './hooks/useNotification';
+import { useNotification } from './hooks/useNotification';
 
-export const Notification = ({
-  notifications,
-  closeNotification,
-}: {
-  notifications: NotificationType[];
-  closeNotification: (id: string) => void;
-}) => {
+export const Notification = () => {
+  const { notifications, closeNotification } = useNotification();
   return (
     <>
       {notifications.length > 0 && (
