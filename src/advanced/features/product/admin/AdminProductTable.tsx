@@ -1,5 +1,5 @@
 import { formatPrice } from '../../../shared/utils/priceUtils';
-import { ProductWithUI } from '../../hook/useProduct';
+import { ProductWithUI } from '../hooks/useProduct';
 
 export const AdminProductTable = ({
   products,
@@ -10,13 +10,14 @@ export const AdminProductTable = ({
   startEditProduct: (product: ProductWithUI) => void;
   deleteProduct: (productId: string) => void;
 }) => {
+  console.log('AdminProductTable');
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead className="bg-gray-50 border-b border-gray-200">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              상품명
+              상품명2
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               가격
