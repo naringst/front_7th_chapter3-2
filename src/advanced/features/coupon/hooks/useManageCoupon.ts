@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
-import { Coupon } from '../../../../types';
 import { useNotification } from '../../notification/hooks/useNotification';
 import {
   couponsWithStorageAtom,
   selectedCouponAtom,
 } from '../atoms/coupon.atom';
 import { useAtom } from 'jotai';
+import { Coupon } from '../../../../types';
 
 export const initialCoupons: Coupon[] = [
   {
